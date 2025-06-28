@@ -1,4 +1,4 @@
-# django Calculator App with AWS EKS Deployment, Prometheus & Grafana Monitoring
+# Django Calculator App with AWS EKS Deployment, Prometheus & Grafana Monitoring
 
 Project Summary:
 This project demonstrates a complete DevOps pipeline for a Django-based calculator application. The app is containerized using Docker and pushed to AWS Elastic Container Registry (ECR). The containerized application is then deployed to an AWS Elastic Kubernetes Service (EKS) cluster, where it is exposed to the internet using a LoadBalancer type Kubernetes service.
