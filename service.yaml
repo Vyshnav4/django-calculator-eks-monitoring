@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-calculator-service
+spec:
+  selector:
+    app: django-calculator
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    # Port that the Load Balancer will listen on
+    port: 80
+    # Port on the container that traffic will be sent to
+    targetPort: 8000

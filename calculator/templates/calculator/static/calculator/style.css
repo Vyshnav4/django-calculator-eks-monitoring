@@ -1,0 +1,130 @@
+/* --- Basic Setup & Animated Gradient Background --- */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: linear-gradient(-45deg, #845EC2, #D65DB1, #FF6F91, #FFC75F);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+/* Hide the placeholder blobs from the previous design */
+.background-blobs {
+    display: none;
+}
+
+/* --- Solid Calculator Container --- */
+.calculator-container {
+    width: 100%;
+    max-width: 350px;
+    padding: 2rem;
+    border-radius: 20px;
+    background: #2E3440; /* Nord theme dark color */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid #4C566A;
+}
+
+h1 {
+    text-align: center;
+    color: #ECEFF4;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* --- Display Screen --- */
+.display-container {
+    background: #20242d;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    text-align: right;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+}
+
+#display {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 1.6rem;
+    color: #8892a7;
+    text-align: right;
+    box-sizing: border-box;
+    font-weight: 400;
+    height: 30px;
+}
+
+#display:focus, #display::placeholder {
+    outline: none;
+    color: #8892a7;
+}
+
+#result-display {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ECEFF4;
+    min-height: 54px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/* --- 3D Buttons Grid --- */
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.btn {
+    padding: 1.1rem 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 12px;
+    color: #D8DEE9;
+    cursor: pointer;
+    background: #434C5E;
+    box-shadow: 0 4px #3B4252; /* 3D effect shadow */
+    transition: all 0.07s ease-in-out;
+}
+
+.btn:active {
+    transform: translateY(4px); /* Press down effect */
+    box-shadow: 0 0px #3B4252; /* Remove shadow when pressed */
+}
+
+.btn-operator {
+    background: #5E81AC; /* Blue */
+    box-shadow: 0 4px #4C566A;
+    color: #ECEFF4;
+}
+
+.btn-special {
+    background: #BF616A; /* Red */
+    box-shadow: 0 4px #a9555f;
+    color: #ECEFF4;
+}
+
+.btn-equals {
+    grid-column: span 2;
+    background: #B48EAD; /* Purple */
+    box-shadow: 0 4px #93738c;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.btn-zero {
+    grid-column: span 2;
+}

@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Glass Calculator</title>
+    <link rel="stylesheet" href="{% static 'calculator/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+
+    <div class="calculator-container">
+        <h1>Glass Calculator</h1>
+
+        <form action="{% url 'index' %}" method="post" id="calculator-form">
+            {% csrf_token %}
+
+            <div class="display-container">
+                <input type="text" name="expression" id="display" value="{{ expression }}" readonly placeholder="0">
+                <div id="result-display">{{ result }}</div>
+            </div>
+
+            <div class="buttons-grid">
+                <button type="button" class="btn btn-special" onclick="clearDisplay()">C</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay('(')">(</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay(')')">)</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay('/')">&divide;</button>
+
+                <button type="button" class="btn" onclick="appendToDisplay('7')">7</button>
+                <button type="button" class="btn" onclick="appendToDisplay('8')">8</button>
+                <button type="button" class="btn" onclick="appendToDisplay('9')">9</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay('*')">&times;</button>
+
+                <button type="button" class="btn" onclick="appendToDisplay('4')">4</button>
+                <button type="button" class="btn" onclick="appendToDisplay('5')">5</button>
+                <button type="button" class="btn" onclick="appendToDisplay('6')">6</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+
+                <button type="button" class="btn" onclick="appendToDisplay('1')">1</button>
+                <button type="button" class="btn" onclick="appendToDisplay('2')">2</button>
+                <button type="button" class="btn" onclick="appendToDisplay('3')">3</button>
+                <button type="button" class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+
+                <button type="button" class="btn btn-zero" onclick="appendToDisplay('0')">0</button>
+                <button type="button" class="btn" onclick="appendToDisplay('.')">.</button>
+                <button type="submit" class="btn btn-equals" id="equals-btn">=</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function appendToDisplay(value) {
+            // Prevent multiple operators in a row
+            const lastChar = display.value.slice(-1);
+            const operators = ['/', '*', '-', '+'];
+            if (operators.includes(lastChar) && operators.includes(value)) {
+                return;
+            }
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            document.getElementById('result-display').innerText = '';
+        }
+    </script>
+
+</body>
+</html>
