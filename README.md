@@ -196,5 +196,37 @@ In Grafana we can get detailed dashboard
 
 Output
 
+Django App
+
+![App Screenshot](django-lb-app.png)
+
+Prometheus Graph
+
+![Prometheus](djano-prom-2.png)
+
+
+![Prometheus](djano-prom-4.png)
+
+Grafana Dashboard
+
+![Grafana](django-grafana-4.png)
+
+
+
+Cleanup
+
+To avoid incurring ongoing AWS charges, you must delete the resources you created.
+
+Delete the Cluster and its Nodes: The easiest way is with eksctl. This will delete the EKS cluster and all associated resources like the EC2 nodes and the Load Balancer.
+
+```console
+eksctl delete cluster --name django-calc-cluster --region <your-aws-region>
+
+```
+
+
+Delete the ECR Repository (Optional): If you no longer need the Docker image, you can delete the ECR repository from the AWS Console.
+
+
 
 
