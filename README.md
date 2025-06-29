@@ -1,12 +1,27 @@
-# django Calculator App with AWS EKS Deployment, Prometheus & Grafana Monitoring
+
+# Django Calculator App – Full CI/CD with Jenkins, Docker, AWS ECR → EKS, plus Prometheus & Grafana Monitoring
 
 Project Summary:
-This project demonstrates a complete DevOps pipeline for a Django-based calculator application. The app is containerized using Docker and pushed to AWS Elastic Container Registry (ECR). The containerized application is then deployed to an AWS Elastic Kubernetes Service (EKS) cluster, where it is exposed to the internet using a LoadBalancer type Kubernetes service.
 
-To monitor the app’s performance and health, Prometheus and Grafana are deployed using Helm charts. Prometheus collects metrics from the Django app and Kubernetes cluster, while Grafana visualizes these metrics in real-time dashboards.
+This project showcases a complete DevOps workflow for a Dockerized Django calculator application:
 
+CI/CD with Jenkins:
 
-Step 1: Build and Run with Docker Locally
+A declarative Jenkinsfile checks out the source from GitHub, builds the Docker image, and securely pushes each tagged build to AWS Elastic Container Registry (ECR).
+
+Container Orchestration with EKS:
+
+The versioned image is deployed to an AWS Elastic Kubernetes Service (EKS) cluster via Kubernetes manifests/Helm, and exposed publicly through a LoadBalancer-type service.
+
+Observability:
+
+Prometheus (deployed through Helm charts) scrapes  cluster metrics.
+
+Grafana renders real-time dashboards to visualize performance, resource usage, and availability.
+
+Together, the pipeline delivers hands-free builds, automated container promotion, scalable Kubernetes deployment, and production-grade monitoring
+
+Step 0: Build and Run with Docker Locally
 This step confirms that your Docker setup is working correctly before you push to AWS.
 
 Ensure Docker is Running: Make sure the Docker Desktop application is open and running on your system.
@@ -25,37 +40,67 @@ docker run -p 8000:8000 django-calculator
 
 Test the App: Open your web browser and navigate to http://localhost:8000. You should see your calculator application running!
 
-Step 3: Push the Docker Image to AWS ECR
-Now push the image into the AWS cloud.
-Prerequisites:
-•	You have an AWS account.
-•	You have the AWS CLI installed and configured (aws configure).
-1.	Create an ECR Repository using AWS CLI: 
+After testing commit to the Github repository
+
+Step 1: Create a Jenkins Server
+
+•	Set up a running Jenkins instance on an EC2 instance with the AmazonEC2ContainerRegistryPowerUser IAM policy attached.
+
+•	Follow the official Jenkins documentation to install and configure Jenkins.
+
+Required Jenkins Plugins:
+
+•	GitHub Integration (or Git plugin)
+•	Docker Pipeline
+•	AWS Steps
+Docker Installation (on Jenkins server):
 
 ```console
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo usermod -aG docker jenkins # Add Jenkins user to Docker group
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo systemctl restart jenkins # Restart Jenkins after adding user to Docker group
+```
+
+Step 2: Prepare GitHub Repository
+
+Your GitHub repository should contain:
+•	Django application code
+•	A Dockerfile
+•	A Jenkinsfile
+
+Create ECR Repository Using AWS CLI:
+
+```console
+
 aws ecr create-repository --repository-name django-calculator-app --region us-east-1
-Note down your repositoryUri from the output. It will look like <aws_account_id>.dkr.ecr.<your-aws-region>.amazonaws.com/django-calculator-app.
+Note down your repositoryUri from the output. It will look like:
+<aws_account_id>.dkr.ecr.<your-aws-region>.amazonaws.com/django-calculator-app
 ```
 
-2.	Authenticate Docker to your ECR Registry: This command gets an authentication token from AWS and uses it to log your Docker client in.
+Step 3: Create and Configure Jenkins Pipeline
 
-```console
-aws ecr get-login-password --region <your-aws-region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<your-aws-region>.amazonaws.com
+1.	Log in to Jenkins.
+2.	On the dashboard, click "New Item" (or "Create a Job").
+3.	Enter an item name (e.g., Django-App-ECR-Pipeline).
+4.	Select "Pipeline" and click OK.
+5.	On the configuration page:
 
-```
-You should see a "Login Succeeded" message.
+	Build Triggers:
+	For automatic builds on push: check "GitHub hook trigger for GITScm polling"
+	
+    Or Just copy the script in jenkinsfile it will automatically clone the repo and build the image
 
-3.	Tag Your Docker Image: You need to tag your local image with the ECR repository URI so Docker knows where to push it.
+6.	Click Save.
+Step 4: Run the Jenkins Pipeline
+1.	On the pipeline’s Jenkins job page, click "Build Now"
 
-```console
-docker tag django-calculator:latest <your-ecr-repository-uri>:latest
-```
+2.	Monitor the build progress in the Build History section.
 
-4.	Push the Image to ECR: Finally, push the tagged image.
+Click a build number, then "Console Output" to view logs.
 
-```console
-docker push <your-ecr-repository-uri>:latest
-```
 
 If all steps were successful, your containerized Django application is now stored in your private AWS ECR repository. From here, we can use it in other AWS services like ECS (Elastic Container Service) or EKS (Elastic Kubernetes Service) to deploy and run your application at scale.
 
