@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: calculator-container
-        # CRITICAL: Replace this with your actual ECR image URI from Step 1
-        image: 239002030585.dkr.ecr.us-east-1.amazonaws.com/django-calculator-app:latest
+        #  Replace this with your actual ECR image URI
+        image: .dkr.ecr.us-east-1.amazonaws.com/django-calculator-app:latest
         ports:
         - containerPort: 8000

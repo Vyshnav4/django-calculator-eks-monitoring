@@ -4,7 +4,7 @@ metadata:
   name: django-calculator-service
 spec:
   selector:
-    app: django-calculator
+    app: django-calculatorku
   type: LoadBalancer
   ports:
   - protocol: TCP
